@@ -2,7 +2,7 @@
 # A Star Path Planner
 
 ## Overview
-This repository contains a ROS 2-based path planning system using the A* algorithm. It includes nodes for map publishing, path planning, and a client for requesting paths.
+This repository contains a ROS 2-based path planning system using the A* algorithm. It includes nodes for map publishing, path planning, and a service-client for requesting paths.
 
 **Components**: 
 1. map_publisher: Publishes a static map with obstacles.

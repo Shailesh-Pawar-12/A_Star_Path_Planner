@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
   request->start.pose.orientation.w = 1.0; // Default orientation for start pose
   request->goal.header.frame_id =
       "map"; // Specify the frame_id for goal position
-  request->goal.pose.position.x = 19.0;   // Adjust goal pose x-coordinate
-  request->goal.pose.position.y = 19.0;   // Adjust goal pose y-coordinate
+  request->goal.pose.position.x = 5.0;   // Adjust goal pose x-coordinate
+  request->goal.pose.position.y = 7.0;   // Adjust goal pose y-coordinate
   request->goal.pose.orientation.w = 1.0; // Default orientation for goal pose
 
   // Call the service

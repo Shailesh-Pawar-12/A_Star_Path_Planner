@@ -4,13 +4,13 @@ PathPlanner::PathPlanner(const rclcpp::NodeOptions &options)
     : LifecycleNode("path_planner_node", options) {}
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-PathPlanner::on_configure(const rclcpp_lifecycle::State &previous_state) {
+PathPlanner::on_configure(const rclcpp_lifecycle::State &) {
 
   map_sub_ = this->create_subscription<nav_msgs::msg::OccupancyGrid>(
       "/map", 10,
       std::bind(&PathPlanner::mapCallback, this, std::placeholders::_1));
 
-  path_pub_ = this->create_publisher<nav_msgs::msg::Path>("/planned_path", 10);
+  path_pub_ = this->create_publisher<nav_msgs::msg::Path>("/a_star_planned_path", 10);
 
   start_goal_publisher_ =
       this->create_publisher<visualization_msgs::msg::Marker>(
@@ -33,7 +33,7 @@ PathPlanner::on_configure(const rclcpp_lifecycle::State &previous_state) {
 }
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-PathPlanner::on_activate(const rclcpp_lifecycle::State &previous_state) {
+PathPlanner::on_activate(const rclcpp_lifecycle::State &) {
 
   start_goal_publisher_->on_activate();
   path_pub_->on_activate();
@@ -43,7 +43,7 @@ PathPlanner::on_activate(const rclcpp_lifecycle::State &previous_state) {
 }
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-PathPlanner::on_deactivate(const rclcpp_lifecycle::State &previous_state) {
+PathPlanner::on_deactivate(const rclcpp_lifecycle::State &) {
 
   start_goal_publisher_->on_deactivate();
   path_pub_->on_deactivate();
@@ -53,15 +53,34 @@ PathPlanner::on_deactivate(const rclcpp_lifecycle::State &previous_state) {
 }
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-PathPlanner::on_cleanup(const rclcpp_lifecycle::State &previous_state) {
+PathPlanner::on_cleanup(const rclcpp_lifecycle::State &) {
 
-  RCLCPP_INFO(get_logger(), "Cleaning up Path Planner");
   map_sub_.reset();
   path_pub_.reset();
   current_map_.reset();
   get_plan_service_.reset();
+  RCLCPP_INFO(get_logger(), "Path Planner Cleaned up");
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
       CallbackReturn::SUCCESS;
+}
+
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+PathPlanner::on_shutdown(const rclcpp_lifecycle::State &) {
+
+  map_sub_.reset();
+  path_pub_.reset();
+  current_map_.reset();
+  get_plan_service_.reset();
+  RCLCPP_INFO(get_logger(), "Path Planner Shutdown");
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
+      CallbackReturn::SUCCESS;
+}
+
+void PathPlanner::on_shutdown()
+{
+  on_deactivate(get_current_state());
+  on_cleanup(get_current_state());
+  on_shutdown(get_current_state());
 }
 
 bool PathPlanner::pairExists(const std::vector<std::pair<int, int>> &vec, int x,

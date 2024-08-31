@@ -16,6 +16,9 @@
 #include <tf2_ros/buffer.h>
 #include <vector>
 #include <thread>
+#include <iostream>
+#include <functional>
+#include "rclcpp_lifecycle/state.hpp"
 
 class PathPlanner : public rclcpp_lifecycle::LifecycleNode {
 public:
@@ -28,16 +31,20 @@ public:
   // LifecycleNode overrides
   virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
       CallbackReturn
-      on_configure(const rclcpp_lifecycle::State &previous_state) override;
+      on_configure(const rclcpp_lifecycle::State &) override;
   virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
       CallbackReturn
-      on_activate(const rclcpp_lifecycle::State &previous_state) override;
+      on_activate(const rclcpp_lifecycle::State &) override;
   virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
       CallbackReturn
-      on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
+      on_deactivate(const rclcpp_lifecycle::State &) override;
   virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
       CallbackReturn
-      on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
+      on_cleanup(const rclcpp_lifecycle::State &) override;
+  virtual rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::
+  CallbackReturn 
+  on_shutdown(const rclcpp_lifecycle::State &) override;
+  void on_shutdown();
 
 private:
   void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr map);
@@ -66,6 +73,7 @@ private:
   visualization_msgs::msg::Marker
   createMarker(const geometry_msgs::msg::PoseStamped &pose, int id);
   bool isPoseValid(const geometry_msgs::msg::PoseStamped &pose);
+
 };
 
 #endif // PATH_PLANNER_HPP_

@@ -36,6 +36,7 @@ public:
       }
     }
 
+    
     // Publish map periodically
     timer_ = this->create_wall_timer(
         std::chrono::milliseconds(1000),
