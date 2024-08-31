@@ -13,7 +13,7 @@ This repository contains a ROS 2-based path planning system using the A* algorit
 
 ## ROS 2 File structure
 ```
-├── a*_planner.rviz
+├── a_star_planner.rviz
 ├── images
 │   ├── map_publisher.png
 │   ├── path_planner_client.png
@@ -60,7 +60,7 @@ This repository contains a ROS 2-based path planning system using the A* algorit
   source install/setup.bash
   rviz2
   ```
-> **Note:** Rviz should use a*_planner.rviz file configuration.
+> **Note:** Rviz should use a_star_planner.rviz file configuration.
 
 **3. In terminal C**
   ```
